@@ -1,0 +1,412 @@
+/* ============================================================
+   Ecomais — tokens de design
+   Paleta inspirada nas cores de separação de resíduos (papel/azul,
+   orgânico/marrom, reciclável/azul, vidro/verde, metal/amarelo).
+   ============================================================ */
+:root {
+  --cor-fundo: #F6F8F4;
+  --cor-texto: #16241C;
+  --cor-texto-suave: #4B5A50;
+  --cor-primaria: #1F5D42;
+  --cor-primaria-escura: #143D2C;
+  --cor-acento: #D9A441;
+  --cor-borda: #DCE3D8;
+  --cor-superficie: #FFFFFF;
+
+  --residuo-papel: #2F6FED;
+  --residuo-organico: #8B5E3C;
+  --residuo-vidro: #2E8B57;
+  --residuo-metal: #F2C94C;
+  --residuo-plastico: #E4572E;
+
+  --fonte-display: 'Space Grotesk', system-ui, sans-serif;
+  --fonte-texto: 'Inter', system-ui, sans-serif;
+
+  --raio: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-texto);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--fonte-display);
+  margin: 0;
+}
+
+/* Layout geral do app (mobile-first) */
+.app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--cor-fundo);
+  position: relative;
+}
+
+/* Assinatura visual: faixa com as cores da separação de resíduos */
+.faixa-separacao {
+  height: 6px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--residuo-papel) 0 20%,
+    var(--residuo-organico) 20% 40%,
+    var(--residuo-vidro) 40% 60%,
+    var(--residuo-metal) 60% 80%,
+    var(--residuo-plastico) 80% 100%
+  );
+}
+
+.app-topo {
+  padding: 18px 20px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.marca {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--cor-primaria-escura);
+  letter-spacing: -0.01em;
+}
+
+.app-conteudo {
+  flex: 1;
+  padding: 4px 20px 24px;
+}
+
+/* Navegação inferior */
+.app-nav {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  background: var(--cor-superficie);
+  border-top: 1px solid var(--cor-borda);
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  padding: 8px 4px;
+  border-radius: 10px;
+  color: var(--cor-texto-suave);
+  font-family: var(--fonte-texto);
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.nav-item-ativo {
+  color: var(--cor-primaria);
+  background: rgba(31, 93, 66, 0.08);
+}
+
+.nav-emoji {
+  font-size: 1.25rem;
+}
+
+/* Telas */
+.tela {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 12px;
+}
+
+.tela-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--cor-primaria);
+}
+
+.eyebrow-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bolinha-live {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--residuo-plastico);
+  animation: pulso-live 1.6s ease-in-out infinite;
+}
+
+@keyframes pulso-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.tela-header h1 {
+  font-size: 1.4rem;
+  line-height: 1.25;
+  color: var(--cor-primaria-escura);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+}
+
+.campo select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-superficie);
+  font-family: var(--fonte-texto);
+  font-size: 0.95rem;
+  color: var(--cor-texto);
+}
+
+.card-destaque {
+  background: var(--cor-primaria);
+  color: #fff;
+  border-radius: var(--raio);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.card-destaque-hora {
+  font-family: var(--fonte-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+.card-destaque p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.aviso {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.aviso-erro {
+  color: var(--residuo-plastico);
+}
+
+/* Login do motorista */
+.form-login {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-login input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-superficie);
+  font-family: var(--fonte-texto);
+  font-size: 0.95rem;
+  color: var(--cor-texto);
+}
+
+.botao {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  background: var(--cor-primaria);
+  color: #fff;
+  font-family: var(--fonte-texto);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.botao-secundario {
+  background: transparent;
+  color: var(--cor-primaria);
+  border: 1.5px solid var(--cor-borda);
+}
+
+.card-destaque-motorista p {
+  font-size: 0.85rem;
+}
+
+/* Painel administrativo */
+.admin-secao {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.lista-admin {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.item-admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-superficie);
+}
+
+.item-admin strong {
+  font-size: 0.9rem;
+}
+
+.acoes-admin {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.botao-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--fonte-texto);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cor-primaria);
+  cursor: pointer;
+}
+
+.botao-link-perigo {
+  color: var(--residuo-plastico);
+}
+
+.form-titulo {
+  font-family: var(--fonte-display);
+  font-size: 1rem;
+  color: var(--cor-primaria-escura);
+}
+
+.dias-semana {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip-dia {
+  padding: 6px 10px;
+  font-size: 0.75rem;
+}
+
+.campo-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.nota {
+  font-size: 0.75rem;
+  color: var(--cor-texto-suave);
+}
+
+/* Mapa */
+.mapa-container {
+  height: 320px;
+  border-radius: var(--raio);
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+}
+
+.filtro-chip-linha {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  border: 1.5px solid var(--cor-borda);
+  background: var(--cor-superficie);
+  font-family: var(--fonte-texto);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
+}
+
+.chip-ativo {
+  color: var(--cor-texto);
+  background: rgba(31, 93, 66, 0.08);
+}
+
+.chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Ícone customizado do caminhão no mapa (evita ícone padrão do Leaflet) */
+.icone-caminhao {
+  position: relative;
+}
+
+.icone-caminhao .ponto {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+.icone-caminhao .pulso {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--cor-primaria);
+  opacity: 0.35;
+  animation: pulso-mapa 1.8s ease-out infinite;
+}
+
+@keyframes pulso-mapa {
+  0% { transform: scale(0.6); opacity: 0.5; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
