@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import VoltarAoTopo from './components/portal/VoltarAoTopo'
 import Navbar from './components/portal/Navbar'
 import LandingPage from './components/portal/LandingPage'
 import EmBreve from './components/portal/EmBreve'
+import Footer from './components/portal/Footer'
 import EcomaisApp from './components/EcomaisApp'
 import { buscarServicos, type ServicoPortal } from './api'
 
@@ -37,7 +39,12 @@ export default function App() {
   }
 
   if (secao === 'meu-lixo') {
-    return <EcomaisApp aoVoltar={() => navegar('inicio')} />
+    return (
+      <>
+        <EcomaisApp aoVoltar={() => navegar('inicio')} />
+        <VoltarAoTopo />
+      </>
+    )
   }
 
   if (carregando) {
@@ -51,14 +58,18 @@ export default function App() {
   const servico = servicos.find((s) => s.id === secao)
 
   return (
-    <div className="portal">
-      <Navbar servicos={servicos} secaoAtiva={secao} onNavegar={navegar} />
-      {erro && <p className="aviso aviso-erro portal-conteudo">{erro}</p>}
-      {servico ? (
-        <EmBreve servico={servico} aoVoltar={() => navegar('inicio')} />
-      ) : (
-        <LandingPage servicos={servicos} onNavegar={navegar} />
-      )}
-    </div>
+    <>
+      <div className="portal">
+        <Navbar servicos={servicos} secaoAtiva={secao} onNavegar={navegar} />
+        {erro && <p className="aviso aviso-erro portal-conteudo">{erro}</p>}
+        {servico ? (
+          <EmBreve servico={servico} aoVoltar={() => navegar('inicio')} />
+        ) : (
+          <LandingPage servicos={servicos} onNavegar={navegar} />
+        )}
+        <Footer />
+      </div>
+      <VoltarAoTopo />
+    </>
   )
 }

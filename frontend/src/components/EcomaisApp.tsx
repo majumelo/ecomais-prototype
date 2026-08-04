@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ArrowLeft, Clock, MapPin, Truck, User, type LucideIcon } from 'lucide-react'
 import HorarioColeta from './HorarioColeta'
 import MapaInterativo from './MapaInterativo'
 import GpsCaminhao from './GpsCaminhao'
@@ -6,11 +7,11 @@ import Login from './Login'
 
 type Aba = 'horario' | 'mapa' | 'caminhao' | 'login'
 
-const ABAS: { id: Aba; label: string; emoji: string }[] = [
-  { id: 'horario', label: 'Horário', emoji: '🕒' },
-  { id: 'mapa', label: 'Mapa', emoji: '📍' },
-  { id: 'caminhao', label: 'Caminhão', emoji: '🚛' },
-  { id: 'login', label: 'Login', emoji: '👤' },
+const ABAS: { id: Aba; label: string; Icone: LucideIcon }[] = [
+  { id: 'horario', label: 'Horário', Icone: Clock },
+  { id: 'mapa', label: 'Mapa', Icone: MapPin },
+  { id: 'caminhao', label: 'Caminhão', Icone: Truck },
+  { id: 'login', label: 'Login', Icone: User },
 ]
 
 export default function EcomaisApp({ aoVoltar }: { aoVoltar: () => void }) {
@@ -22,7 +23,8 @@ export default function EcomaisApp({ aoVoltar }: { aoVoltar: () => void }) {
 
       <header className="app-topo">
         <button className="app-voltar" onClick={aoVoltar}>
-          ← Sua Cidade
+          <ArrowLeft size={14} />
+          Sua Cidade
         </button>
         <span className="marca">Ecomais</span>
       </header>
@@ -41,9 +43,7 @@ export default function EcomaisApp({ aoVoltar }: { aoVoltar: () => void }) {
             className={`nav-item ${aba === item.id ? 'nav-item-ativo' : ''}`}
             onClick={() => setAba(item.id)}
           >
-            <span className="nav-emoji" aria-hidden="true">
-              {item.emoji}
-            </span>
+            <item.Icone size={19} strokeWidth={2.1} aria-hidden="true" />
             <span>{item.label}</span>
           </button>
         ))}
