@@ -138,6 +138,27 @@ BEFORE UPDATE ON administradores
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ---------------------------------------------------------
+-- servicos_portal — os cards/seções da landing page "Sua Cidade"
+-- (Meu Lixo, Minha Educação, Minha Saúde, Minha Cidadania...).
+-- Fica no banco em vez de hardcoded no frontend para que o admin
+-- consiga ligar/desligar e reordenar serviços sem precisar de deploy.
+-- ---------------------------------------------------------
+CREATE TABLE servicos_portal (
+  id           VARCHAR(50) PRIMARY KEY, -- slug usado na URL: meu-lixo, minha-educacao...
+  nome         VARCHAR(100) NOT NULL,
+  emoji        VARCHAR(10) NOT NULL,
+  descricao    VARCHAR(280) NOT NULL,
+  disponivel   BOOLEAN NOT NULL DEFAULT false,
+  ordem        INTEGER NOT NULL DEFAULT 0,
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TRIGGER trg_servicos_portal_updated_at
+BEFORE UPDATE ON servicos_portal
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- ---------------------------------------------------------
 -- View auxiliar: última posição conhecida de cada caminhão,
 -- já com o nome do bairro — é isso que a tela de GPS ao vivo
 -- (e o endpoint /api/caminhoes/posicoes) consome

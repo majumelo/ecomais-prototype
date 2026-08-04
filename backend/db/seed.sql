@@ -57,6 +57,15 @@ INSERT INTO posicoes_gps (caminhao_id, latitude, longitude, registrado_em) VALUE
   ('c2222222-2222-2222-2222-222222222222', -6.4820, -36.1490, now());
 
 -- ---------------------------------------------------------
+-- Serviços do portal "Sua Cidade" (landing page)
+-- ---------------------------------------------------------
+INSERT INTO servicos_portal (id, nome, emoji, descricao, disponivel, ordem) VALUES
+  ('meu-lixo',        'Meu Lixo',        '♻️', 'Horário de coleta, mapa de pontos e o caminhão ao vivo no seu bairro.', true,  1),
+  ('minha-educacao',  'Minha Educação',  '🎓', 'Matrículas, calendário escolar e informações das escolas do município.', false, 2),
+  ('minha-saude',     'Minha Saúde',     '🏥', 'Agendamentos, unidades de saúde e campanhas de vacinação.', false, 3),
+  ('minha-cidadania', 'Minha Cidadania', '🪪', 'Documentos, protocolos e serviços do cidadão.', false, 4);
+
+-- ---------------------------------------------------------
 -- Administrador de teste (login do painel interno)
 -- usuário: admin@ecomais.com | senha: ecomais123
 -- (hash gerado com pgcrypto/bcrypt, já habilitado no schema.sql)

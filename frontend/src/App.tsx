@@ -1,50 +1,64 @@
-import { useState } from 'react'
-import HorarioColeta from './components/HorarioColeta'
-import MapaInterativo from './components/MapaInterativo'
-import GpsCaminhao from './components/GpsCaminhao'
-import Login from './components/Login'
+import { useEffect, useState } from 'react'
+import Navbar from './components/portal/Navbar'
+import LandingPage from './components/portal/LandingPage'
+import EmBreve from './components/portal/EmBreve'
+import EcomaisApp from './components/EcomaisApp'
+import { buscarServicos, type ServicoPortal } from './api'
 
-type Aba = 'horario' | 'mapa' | 'caminhao' | 'login'
+type Secao = 'inicio' | string
 
-const ABAS: { id: Aba; label: string; emoji: string }[] = [
-  { id: 'horario', label: 'Horário', emoji: '🕒' },
-  { id: 'mapa', label: 'Mapa', emoji: '📍' },
-  { id: 'caminhao', label: 'Caminhão', emoji: '🚛' },
-  { id: 'login', label: 'Login', emoji: '👤' },
-]
+function lerSecaoDaUrl(): Secao {
+  const rota = window.location.hash.replace(/^#\/?/, '')
+  return rota || 'inicio'
+}
 
 export default function App() {
-  const [aba, setAba] = useState<Aba>('horario')
+  const [secao, setSecao] = useState<Secao>(() => lerSecaoDaUrl())
+  const [servicos, setServicos] = useState<ServicoPortal[]>([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState<string | null>(null)
+
+  useEffect(() => {
+    buscarServicos()
+      .then(setServicos)
+      .catch(() => setErro('Não foi possível carregar os serviços do portal.'))
+      .finally(() => setCarregando(false))
+  }, [])
+
+  useEffect(() => {
+    const aoMudarHash = () => setSecao(lerSecaoDaUrl())
+    window.addEventListener('hashchange', aoMudarHash)
+    return () => window.removeEventListener('hashchange', aoMudarHash)
+  }, [])
+
+  function navegar(destino: Secao) {
+    window.location.hash = destino === 'inicio' ? '/' : `/${destino}`
+    setSecao(destino)
+  }
+
+  if (secao === 'meu-lixo') {
+    return <EcomaisApp aoVoltar={() => navegar('inicio')} />
+  }
+
+  if (carregando) {
+    return (
+      <div className="portal">
+        <p className="aviso portal-carregando">Carregando Sua Cidade…</p>
+      </div>
+    )
+  }
+
+  const servico = servicos.find((s) => s.id === secao)
 
   return (
-    <div className="app">
-      <div className="faixa-separacao" aria-hidden="true" />
-
-      <header className="app-topo">
-        <span className="marca">Ecomais</span>
-      </header>
-
-      <main className="app-conteudo">
-        {aba === 'horario' && <HorarioColeta />}
-        {aba === 'mapa' && <MapaInterativo />}
-        {aba === 'caminhao' && <GpsCaminhao />}
-        {aba === 'login' && <Login />}
-      </main>
-
-      <nav className="app-nav">
-        {ABAS.map((item) => (
-          <button
-            key={item.id}
-            className={`nav-item ${aba === item.id ? 'nav-item-ativo' : ''}`}
-            onClick={() => setAba(item.id)}
-          >
-            <span className="nav-emoji" aria-hidden="true">
-              {item.emoji}
-            </span>
-            <span>{item.label}</span>
-          </button>
-        ))}
-      </nav>
+    <div className="portal">
+      <Navbar servicos={servicos} secaoAtiva={secao} onNavegar={navegar} />
+      {erro && <p className="aviso aviso-erro portal-conteudo">{erro}</p>}
+      {servico ? (
+        <EmBreve servico={servico} aoVoltar={() => navegar('inicio')} />
+      ) : (
+        <LandingPage servicos={servicos} onNavegar={navegar} />
+      )}
     </div>
   )
 }

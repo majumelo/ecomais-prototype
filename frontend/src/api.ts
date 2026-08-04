@@ -65,6 +65,14 @@ export interface Caminhao {
   bairroNome: string | null
 }
 
+export interface ServicoPortal {
+  id: string
+  nome: string
+  emoji: string
+  descricao: string
+  disponivel: boolean
+}
+
 async function tratarResposta<T>(resposta: Response): Promise<T> {
   if (resposta.status === 204) return undefined as T
   const dados = await resposta.json().catch(() => null)
@@ -102,6 +110,10 @@ export function buscarPontosColeta(tipo?: TipoResiduo | 'todos') {
 
 export function buscarPosicoesCaminhoes() {
   return buscarJson<PosicaoCaminhao[]>('/api/caminhoes/posicoes')
+}
+
+export function buscarServicos() {
+  return buscarJson<ServicoPortal[]>('/api/servicos')
 }
 
 export async function loginMotorista(email: string, senha: string) {
@@ -214,4 +226,23 @@ export function atualizarCaminhao(
 
 export function excluirCaminhao(token: string, id: string) {
   return apiAdmin<void>(token, `/api/caminhoes/${id}`, { method: 'DELETE' })
+}
+
+export function criarServico(
+  token: string,
+  dados: { id: string; nome: string; emoji: string; descricao: string; disponivel: boolean; ordem: number },
+) {
+  return apiAdmin<ServicoPortal>(token, '/api/servicos', { method: 'POST', body: JSON.stringify(dados) })
+}
+
+export function atualizarServico(
+  token: string,
+  id: string,
+  dados: { nome: string; emoji: string; descricao: string; disponivel: boolean; ordem: number },
+) {
+  return apiAdmin<ServicoPortal>(token, `/api/servicos/${id}`, { method: 'PUT', body: JSON.stringify(dados) })
+}
+
+export function excluirServico(token: string, id: string) {
+  return apiAdmin<void>(token, `/api/servicos/${id}`, { method: 'DELETE' })
 }

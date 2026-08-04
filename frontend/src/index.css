@@ -23,6 +23,12 @@
   --fonte-texto: 'Inter', system-ui, sans-serif;
 
   --raio: 14px;
+
+  /* Portal "Sua Cidade" — identidade própria, à parte da paleta do Ecomais */
+  --portal-azul: #1351B4;
+  --portal-azul-escuro: #0C326F;
+  --portal-fundo: #F4F6F9;
+  --portal-borda: #D5DCE6;
 }
 
 * {
@@ -71,6 +77,18 @@ h1, h2, h3 {
   padding: 18px 20px 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+}
+
+.app-voltar {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--fonte-texto);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+  cursor: pointer;
 }
 
 .marca {
@@ -409,4 +427,184 @@ h1, h2, h3 {
 @keyframes pulso-mapa {
   0% { transform: scale(0.6); opacity: 0.5; }
   100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ============================================================
+   Portal "Sua Cidade" — landing page com os serviços do município
+   ============================================================ */
+.portal {
+  min-height: 100vh;
+  background: var(--portal-fundo);
+}
+
+.portal-carregando {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.portal-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--portal-azul);
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.portal-marca {
+  background: none;
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  cursor: pointer;
+}
+
+.portal-titulo {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.01em;
+  color: #fff;
+}
+
+.portal-subtitulo {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.portal-nav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.portal-nav-item {
+  flex: none;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-family: var(--fonte-texto);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+}
+
+.portal-nav-item-ativo {
+  background: #fff;
+  color: var(--portal-azul-escuro);
+  font-weight: 700;
+}
+
+.portal-conteudo {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 28px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.portal-hero {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.portal-hero .eyebrow {
+  color: var(--portal-azul);
+}
+
+.portal-hero h1 {
+  font-size: 1.6rem;
+  line-height: 1.25;
+  color: var(--portal-azul-escuro);
+}
+
+.portal-hero p {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+}
+
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.portal-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  text-align: left;
+  background: var(--cor-superficie);
+  border: 1px solid var(--portal-borda);
+  border-radius: var(--raio);
+  padding: 18px;
+  cursor: pointer;
+}
+
+.portal-card-emoji {
+  font-size: 1.8rem;
+}
+
+.portal-card-titulo {
+  font-family: var(--fonte-display);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--portal-azul-escuro);
+}
+
+.portal-card-descricao {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--cor-texto-suave);
+}
+
+.portal-badge {
+  margin-top: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cor-texto-suave);
+  background: var(--portal-fundo);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.portal-badge-ativo {
+  color: var(--portal-azul-escuro);
+  background: #E4ECFB;
+}
+
+.portal-em-breve {
+  align-items: center;
+  text-align: center;
+  padding-top: 60px;
+}
+
+.portal-em-breve h1 {
+  font-size: 1.3rem;
+  color: var(--portal-azul-escuro);
+}
+
+.portal-em-breve p {
+  margin: 0;
+  color: var(--cor-texto-suave);
+}
+
+.portal-em-breve .botao {
+  background: var(--portal-azul);
+  margin-top: 8px;
 }

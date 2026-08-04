@@ -4,19 +4,23 @@ import {
   atualizarCaminhao,
   atualizarMotorista,
   atualizarPontoColeta,
+  atualizarServico,
   buscarAdminAtual,
   buscarBairros,
   buscarCaminhoes,
   buscarMotoristasAdmin,
   buscarPontosColeta,
+  buscarServicos,
   criarBairro,
   criarCaminhao,
   criarMotorista,
   criarPontoColeta,
+  criarServico,
   excluirBairro,
   excluirCaminhao,
   excluirMotorista,
   excluirPontoColeta,
+  excluirServico,
   loginAdmin,
   loginMotorista,
   logoutAdmin,
@@ -26,6 +30,7 @@ import {
   type Motorista,
   type MotoristaLogado,
   type PontoColeta,
+  type ServicoPortal,
   type TipoResiduo,
 } from '../api'
 
@@ -60,7 +65,7 @@ export default function Login() {
   const [motorista, setMotorista] = useState<MotoristaLogado | null>(() => carregar(CHAVE_MOTORISTA))
   const [sessaoAdmin, setSessaoAdmin] = useState<SessaoAdmin | null>(() => carregar(CHAVE_ADMIN))
   const [verificando, setVerificando] = useState(true)
-  const [secao, setSecao] = useState<'bairros' | 'pontos' | 'motoristas' | 'caminhoes'>('bairros')
+  const [secao, setSecao] = useState<'bairros' | 'pontos' | 'motoristas' | 'caminhoes' | 'servicos'>('bairros')
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -187,12 +192,19 @@ export default function Login() {
           >
             Caminhões
           </button>
+          <button
+            className={`chip ${secao === 'servicos' ? 'chip-ativo' : ''}`}
+            onClick={() => setSecao('servicos')}
+          >
+            Serviços
+          </button>
         </div>
 
         {secao === 'bairros' && <AdminBairros token={sessaoAdmin.token} />}
         {secao === 'pontos' && <AdminPontos token={sessaoAdmin.token} />}
         {secao === 'motoristas' && <AdminMotoristas token={sessaoAdmin.token} />}
         {secao === 'caminhoes' && <AdminCaminhoes token={sessaoAdmin.token} />}
+        {secao === 'servicos' && <AdminServicos token={sessaoAdmin.token} />}
 
         <button className="botao botao-secundario" onClick={sairAdmin}>
           Sair do painel
@@ -848,6 +860,169 @@ function AdminCaminhoes({ token }: { token: string }) {
         <div className="acoes-admin">
           <button className="botao" type="submit">
             {editandoId ? 'Salvar alterações' : 'Adicionar caminhão'}
+          </button>
+          {editandoId && (
+            <button type="button" className="botao botao-secundario" onClick={cancelar}>
+              Cancelar
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Serviços do portal "Sua Cidade" (landing page)
+// ---------------------------------------------------------------------------
+
+const SERVICO_VAZIO = { id: '', nome: '', emoji: '', descricao: '', disponivel: false, ordem: 0 }
+
+function AdminServicos({ token }: { token: string }) {
+  const [servicos, setServicos] = useState<ServicoPortal[]>([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState<string | null>(null)
+  const [editandoId, setEditandoId] = useState<string | null>(null)
+  const [form, setForm] = useState(SERVICO_VAZIO)
+
+  function recarregar() {
+    setCarregando(true)
+    buscarServicos()
+      .then(setServicos)
+      .catch(() => setErro('Não foi possível carregar os serviços.'))
+      .finally(() => setCarregando(false))
+  }
+
+  useEffect(recarregar, [])
+
+  function editar(s: ServicoPortal, ordem: number) {
+    setEditandoId(s.id)
+    setForm({ id: s.id, nome: s.nome, emoji: s.emoji, descricao: s.descricao, disponivel: s.disponivel, ordem })
+  }
+
+  function cancelar() {
+    setEditandoId(null)
+    setForm({ ...SERVICO_VAZIO, ordem: servicos.length + 1 })
+  }
+
+  async function salvar(e: FormEvent) {
+    e.preventDefault()
+    setErro(null)
+    const dados = {
+      nome: form.nome,
+      emoji: form.emoji,
+      descricao: form.descricao,
+      disponivel: form.disponivel,
+      ordem: form.ordem,
+    }
+    try {
+      if (editandoId) {
+        await atualizarServico(token, editandoId, dados)
+      } else {
+        if (!form.id) {
+          setErro('Informe um id (slug) para o novo serviço, ex: minha-saude.')
+          return
+        }
+        await criarServico(token, { ...dados, id: form.id })
+      }
+      cancelar()
+      recarregar()
+    } catch (err) {
+      setErro(err instanceof Error ? err.message : 'Não foi possível salvar o serviço.')
+    }
+  }
+
+  async function remover(id: string) {
+    if (!confirm('Excluir este serviço do portal?')) return
+    try {
+      await excluirServico(token, id)
+      recarregar()
+    } catch (err) {
+      setErro(err instanceof Error ? err.message : 'Não foi possível excluir o serviço.')
+    }
+  }
+
+  return (
+    <div className="admin-secao">
+      {erro && <p className="aviso aviso-erro">{erro}</p>}
+
+      {carregando ? (
+        <p className="aviso">Carregando…</p>
+      ) : (
+        <ul className="lista-admin">
+          {servicos.map((s, i) => (
+            <li key={s.id} className="item-admin">
+              <div>
+                <strong>
+                  {s.emoji} {s.nome}
+                </strong>
+                <p className="nota">
+                  {s.id} · {s.disponivel ? 'disponível' : 'em breve'}
+                </p>
+              </div>
+              <div className="acoes-admin">
+                <button className="botao-link" onClick={() => editar(s, i + 1)}>
+                  Editar
+                </button>
+                <button className="botao-link botao-link-perigo" onClick={() => remover(s.id)}>
+                  Excluir
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <form className="form-login" onSubmit={salvar}>
+        <h2 className="form-titulo">{editandoId ? 'Editar serviço' : 'Novo serviço'}</h2>
+
+        {!editandoId && (
+          <label className="campo">
+            <span>Id (slug da URL, ex: minha-saude)</span>
+            <input value={form.id} onChange={(e) => setForm((f) => ({ ...f, id: e.target.value }))} required />
+          </label>
+        )}
+
+        <label className="campo">
+          <span>Nome</span>
+          <input value={form.nome} onChange={(e) => setForm((f) => ({ ...f, nome: e.target.value }))} required />
+        </label>
+
+        <label className="campo">
+          <span>Emoji</span>
+          <input value={form.emoji} onChange={(e) => setForm((f) => ({ ...f, emoji: e.target.value }))} required />
+        </label>
+
+        <label className="campo">
+          <span>Descrição</span>
+          <input
+            value={form.descricao}
+            onChange={(e) => setForm((f) => ({ ...f, descricao: e.target.value }))}
+            required
+          />
+        </label>
+
+        <label className="campo">
+          <span>Ordem</span>
+          <input
+            type="number"
+            value={form.ordem}
+            onChange={(e) => setForm((f) => ({ ...f, ordem: Number(e.target.value) }))}
+          />
+        </label>
+
+        <label className="campo campo-checkbox">
+          <input
+            type="checkbox"
+            checked={form.disponivel}
+            onChange={(e) => setForm((f) => ({ ...f, disponivel: e.target.checked }))}
+          />
+          <span>Disponível (aparece como pronto, não "Em breve")</span>
+        </label>
+
+        <div className="acoes-admin">
+          <button className="botao" type="submit">
+            {editandoId ? 'Salvar alterações' : 'Adicionar serviço'}
           </button>
           {editandoId && (
             <button type="button" className="botao botao-secundario" onClick={cancelar}>
