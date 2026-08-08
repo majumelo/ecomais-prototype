@@ -15,7 +15,7 @@ export default function EmBreve({ servico, aoVoltar }: { servico: ServicoPortal;
       <p className="nota">Essa área ainda está sendo construída pela prefeitura. Volte em breve!</p>
       <button className="botao" onClick={aoVoltar}>
         <ArrowLeft size={17} />
-        Voltar para Sua Cidade
+        Voltar para Minha Cidade Virtual
       </button>
     </div>
   )

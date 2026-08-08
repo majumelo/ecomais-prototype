@@ -67,7 +67,7 @@ export default function LandingPage({
               </h1>
 
               <p>
-                O <strong>Sua Cidade</strong> reúne os serviços públicos do seu dia a dia num só portal. Hoje você
+                O <strong>Minha Cidade Virtual</strong> reúne os serviços públicos do seu dia a dia num só portal. Hoje você
                 acompanha a coleta de lixo em tempo real; em breve, também vai cuidar de matrícula escolar,
                 agendamentos de saúde e serviços de cidadania — sem sair de casa.
               </p>

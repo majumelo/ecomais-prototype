@@ -50,7 +50,7 @@ export default function App() {
   if (carregando) {
     return (
       <div className="portal">
-        <p className="aviso portal-carregando">Carregando Sua Cidade…</p>
+        <p className="aviso portal-carregando">Carregando Minha Cidade Virtual…</p>
       </div>
     )
   }

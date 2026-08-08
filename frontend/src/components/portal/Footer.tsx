@@ -5,10 +5,10 @@ export default function Footer() {
     <footer className="portal-footer">
       <div className="portal-footer-conteudo">
         <div>
-          <span className="portal-marca-selo portal-marca-selo-footer" aria-hidden="true">
+          <span className="portal-marca-selo-footer" aria-hidden="true">
             <Landmark size={19} strokeWidth={2.2} />
           </span>
-          <p className="portal-footer-titulo">Sua Cidade</p>
+          <p className="portal-footer-titulo">Minha Cidade Virtual</p>
           <p className="nota">Portal oficial de serviços da Prefeitura Municipal de Cuité, Paraíba.</p>
         </div>
         <div>

@@ -24,7 +24,7 @@ export default function EcomaisApp({ aoVoltar }: { aoVoltar: () => void }) {
       <header className="app-topo">
         <button className="app-voltar" onClick={aoVoltar}>
           <ArrowLeft size={14} />
-          Sua Cidade
+          Minha Cidade Virtual
         </button>
         <span className="marca">Ecomais</span>
       </header>
